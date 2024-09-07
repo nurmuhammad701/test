@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  test-service:
+    container_name: test
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+     - test
+
+networks:
+  test:
+    external: true
+
+
+  
