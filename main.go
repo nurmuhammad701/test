@@ -30,12 +30,14 @@ func Hello(c *gin.Context) {
 	app, err := firebase.NewApp(context.Background(), config, opt)
 	if err != nil {
 		log.Fatalf("Ilovani ishga tushirishda xatolik: %v", err)
+		c.JSON(500, gin.H{"error": err.Error()})
 	}
 
 	// FCM mijozini olish
 	client, err := app.Messaging(context.Background())
 	if err != nil {
 		log.Fatalf("Messaging mijozini olishda xatolik: %v", err)
+		c.JSON(500, gin.H{"error": err.Error()})
 	}
 	token := c.GetHeader("Authorization")
 	if token == "" {
@@ -56,7 +58,9 @@ func Hello(c *gin.Context) {
 	response, err := client.Send(context.Background(), message)
 	if err != nil {
 		log.Fatalf("Xabarni yuborishda xatolik: %v", err)
+		c.JSON(500, gin.H{"error": err.Error()})
 	}
 
 	fmt.Printf("Xabar muvaffaqiyatli yuborildi. Response: %s\n", response)
+	c.JSON(200, gin.H{"message": "Xabar muvaffaqiyatli yuborildi"})
 }
